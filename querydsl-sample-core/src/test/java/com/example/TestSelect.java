@@ -1,9 +1,10 @@
 package com.example;
 
 import com.example.db.querydsl.gen.QAuthor;
-
+import com.example.db.querydsl.gen.QUser;
+import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQueryFactory;
-import org.junit.*;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RootConfig.class, DataConfig.class})
 public class TestSelect {
-    private final Logger LOGGER = LoggerFactory.getLogger(TestSelect.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TestSelect.class);
 
     private final QAuthor qAuthor = QAuthor.author;
+    private final QUser qUser = QUser.user;
 
     @Autowired
     protected SQLQueryFactory sqlQueryFactory;
@@ -45,5 +47,12 @@ public class TestSelect {
 
         List<String> autorNames = sqlQueryFactory.select(qAuthor.name).from(qAuthor).fetch();
         autorNames.forEach(LOGGER::info);
+    }
+
+    @org.junit.Test
+    public void testSelectQUser(){
+
+        List<Tuple> names = sqlQueryFactory.select(qUser.id, qUser.name).from(qUser).fetch();
+        LOGGER.info(names.toString());
     }
 }

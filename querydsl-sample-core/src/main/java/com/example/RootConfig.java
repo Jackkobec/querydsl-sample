@@ -13,21 +13,38 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+/**
+ * Class for DataSource configuration.
+ */
+// Add auto configuration
 @EnableAutoConfiguration
+// Mark this class as configuration
 @Configuration
 class RootConfig {
-
-    private final static Logger logger = LoggerFactory
+    private final static Logger LOGGER = LoggerFactory
             .getLogger(RootConfig.class);
 
+    /**
+     * Configure DataSource.
+     *
+     * @return DataSource
+     */
     @Bean
     public DataSource dataSource() {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        builder.setType(EmbeddedDatabaseType.H2);
-        builder.addScript("classpath:sql/00_init.sql");
-        EmbeddedDatabase ds = builder.build();
-        Log4jdbcProxyDataSource proxyDs = new Log4jdbcProxyDataSource(ds);
-        return proxyDs;
+        // Embedded database builder
+        EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
+        // Chose type of embedded database - example h2
+        embeddedDatabaseBuilder.setType(EmbeddedDatabaseType.H2);
+
+        // Add SQl script for auto fill our database
+        embeddedDatabaseBuilder.addScript("classpath:sql/00_init.sql");// sql/00_init.sql in the querydsl-sample-db
+        // Build database by previous settings
+        EmbeddedDatabase embeddedDatabase = embeddedDatabaseBuilder.build();
+
+        // Create DataSource with embedded data base
+        Log4jdbcProxyDataSource log4jdbcProxyDataSource = new Log4jdbcProxyDataSource(embeddedDatabase);
+
+        return log4jdbcProxyDataSource;
     }
 
 }

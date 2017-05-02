@@ -1,49 +1,41 @@
 package com.example;
 
-import javax.sql.DataSource;
-
 import com.querydsl.sql.H2Templates;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jdbc.query.QueryDslJdbcTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
 public class DataConfig {
 
+    /**
+     * Connect DataSource bean from RootConfig
+     */
     @Autowired
     protected DataSource dataSource;
 
-//    @Bean
-//    public JdbcTemplate jdbcTempate() {
-//        JdbcTemplate template = new JdbcTemplate();
-//        template.setDataSource(this.dataSource);
-//        return template;
-//    }
-//
-//    @Bean
-//    public QueryDslJdbcTemplate queryDslJdbcTemplate() {
-//        QueryDslJdbcTemplate template = new QueryDslJdbcTemplate(
-//                this.dataSource);
-//        return template;
-//    }
-
     /**
-     * SQLQueryFactory bean config
+     * SQLQueryFactory bean config for use querying
+     *
      * @return
      */
     @Bean
-    public SQLQueryFactory queryFactory(){
+    public SQLQueryFactory queryFactory() {
 
+        // Chose template for our database (we use h2 database)
         SQLTemplates templates = new H2Templates();
+        // Send chosen template to the com.querydsl.sql.Configuration
         com.querydsl.sql.Configuration configuration = new com.querydsl.sql.Configuration(templates);
 
+        // Create SQLQueryFactory with com.querydsl.sql.Configuration and DataSource
         SQLQueryFactory sqlQueryFactory = new SQLQueryFactory(configuration, this.dataSource);
+
         return sqlQueryFactory;
     }
 }

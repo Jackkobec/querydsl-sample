@@ -1,3 +1,8 @@
+create table user(
+ id int PRIMARY KEY AUTO_INCREMENT,
+ name VARCHAR (77)
+);
+
 create table author (
     id      int primary key
     ,name   varchar(512)
@@ -11,6 +16,11 @@ create table book (
     ,foreign key (author_id) references author (id)
 );
 
+
+INSERT INTO user (name) VALUES ('Vasa');
+INSERT INTO user (name) VALUES ('Kola');
+INSERT INTO user (name) VALUES ('Peta');
+INSERT INTO user (name) VALUES ('Anna');
 
 
 insert into author (id,name)　values (1, 'Arthur Conan Doyle');

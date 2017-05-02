@@ -1,13 +1,9 @@
 package com.example;
 
-import com.example.db.querydsl.gen.Book;
-import com.example.db.querydsl.gen.QBook;
-
-import com.querydsl.sql.*;
+import com.example.db.querydsl.gen.QUser;
+import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jdbc.query.QueryDslJdbcTemplate;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -16,25 +12,16 @@ import java.util.List;
 public class Test {
 
     @Autowired
-    DataSource dataSource;
-
-    @Autowired
-    protected QueryDslJdbcTemplate queryDslJdbcTemplate;
+    private  SQLQueryFactory sqlQueryFactory;
 
     public List<String> method(){
 
-        SQLTemplates templates = new H2Templates();
+        QUser qUser = QUser.user;
 
-        Configuration configuration = new Configuration(templates);
-
-        SQLQueryFactory sqlQueryFactory = new SQLQueryFactory(configuration, this.dataSource);
-
-        QBook qBook = new QBook("book");
-
-        List<String> books = sqlQueryFactory.select(qBook.isbn).fetch();
+        List<String> names = sqlQueryFactory.select(qUser.name).from(qUser).fetch();
 
 
-        return books;
+        return names;
     }
 
     public static void main(String[] args) {
